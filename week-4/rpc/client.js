@@ -1,4 +1,4 @@
-// Define metrics objects to store measurement data
+// Metrics
 const metrics = {
   getRequestCount: 0,
   postRequestCount: 0,
@@ -13,11 +13,13 @@ function measureResponseTime(startTime) {
   metrics.totalResponseTime += responseTime;
 }
 
-function getData() {
+
+// Define an RPC function for getting data
+function getUserData() {
   const startTime = performance.now();
   metrics.getRequestCount++;
 
-  fetch('http://localhost:5500/api/users', {
+  return fetch('http://localhost:5500/api/users', {
     method: 'GET'
   })
     .then(response => {
@@ -25,15 +27,16 @@ function getData() {
       return response.json()
     })
     .then(data => {
-      document.getElementById('get-response').textContent = JSON.stringify(data, null, 2)
-      console.log(data)
+      document.getElementById('get-response').textContent = JSON.stringify(data, null, 2);
     })
     .catch(error => {
-      console.error('GET Error:', error);
+      console.error('RPC Error (GET):', error);
+      throw error; // Re-throw the error to handle it at a higher level if needed
     });
 }
 
-function postData() {
+// Define an RPC function for posting data
+function addUser() {
   const newUser = {
     id: document.getElementById('id').value,
     name: document.getElementById('name').value
@@ -42,7 +45,7 @@ function postData() {
   const startTime = performance.now();
   metrics.postRequestCount++;
 
-  fetch('http://localhost:5500/api/users', {
+  return fetch('http://localhost:5500/api/users', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -51,13 +54,13 @@ function postData() {
   })
     .then(response => {
       measureResponseTime(startTime)
-      return response.json()
-    })
-    .then(response => {
-      document.getElementById('post-response').textContent = JSON.stringify(response);
+      return response.json()})
+    .then(data => {
+      document.getElementById('post-response').textContent = JSON.stringify(data, null, 2);
     })
     .catch(error => {
-      console.error('POST Error:', error);
+      console.error('RPC Error (POST):', error);
+      throw error; // Re-throw the error to handle it at a higher level if needed
     });
 }
 
@@ -66,8 +69,8 @@ function displayMetrics() {
   const metricsDisplay = `
     Total GET Requests: ${metrics.getRequestCount}
     Total POST Requests: ${metrics.postRequestCount}
-    Total Requests: ${metrics.getRequestCount + metrics.postRequestCount}
-    Average Response Time: ${metrics.totalResponseTime / (metrics.getRequestCount + metrics.postRequestCount)} ms
+    Total Requests: ${metrics.totalRequestCount}
+    Average Response Time: ${metrics.totalResponseTime / metrics.totalRequestCount} ms
   `;
 
   document.getElementById('metrics').textContent = metricsDisplay;
