@@ -23,6 +23,7 @@ function getUserData() {
     method: 'GET'
   })
     .then(response => {
+      console.log("User sent Request")
       measureResponseTime(startTime)
       return response.json()
     })
@@ -54,7 +55,8 @@ function addUser() {
   })
     .then(response => {
       measureResponseTime(startTime)
-      return response.json()})
+      return response.json()
+    })
     .then(data => {
       document.getElementById('post-response').textContent = JSON.stringify(data, null, 2);
     })
@@ -69,8 +71,8 @@ function displayMetrics() {
   const metricsDisplay = `
     Total GET Requests: ${metrics.getRequestCount}
     Total POST Requests: ${metrics.postRequestCount}
-    Total Requests: ${metrics.totalRequestCount}
-    Average Response Time: ${metrics.totalResponseTime / metrics.totalRequestCount} ms
+    Total Requests: ${metrics.getRequestCount + metrics.postRequestCount}
+    Average Response Time: ${metrics.totalResponseTime / (metrics.getRequestCount + metrics.postRequestCount)} ms
   `;
 
   document.getElementById('metrics').textContent = metricsDisplay;
