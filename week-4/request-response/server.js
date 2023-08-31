@@ -17,7 +17,7 @@ app.get('/api/users', (req, res) => {
 
   res.setHeader('Content-Type', 'application/json');
   res.status(200).send(JSON.stringify(Object.values(database)));
-  console.log(database)
+  console.log("Response sent")
 });
 
 app.post('/api/users', (req, res) => {

@@ -14,6 +14,7 @@ function measureResponseTime(startTime) {
 }
 
 function getData() {
+  console.log("User do GET request")
   const startTime = performance.now();
   metrics.getRequestCount++;
 
@@ -26,7 +27,6 @@ function getData() {
     })
     .then(data => {
       document.getElementById('get-response').textContent = JSON.stringify(data, null, 2)
-      console.log(data)
     })
     .catch(error => {
       console.error('GET Error:', error);
