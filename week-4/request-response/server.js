@@ -17,6 +17,7 @@ app.get('/api/users', (req, res) => {
 
   res.setHeader('Content-Type', 'application/json');
   res.status(200).send(JSON.stringify(Object.values(database)));
+  console.log(database)
 });
 
 app.post('/api/users', (req, res) => {
@@ -26,11 +27,13 @@ app.post('/api/users', (req, res) => {
 
   req.on('data', chunk => {
     data += chunk;
+    console.log(`Data has been write ${data}`)
   });
 
   req.on('end', () => {
     const newUser = JSON.parse(data);
     database[newUser.id] = newUser;
+    console.log(`Data has been added ${data}`)
 
     res.setHeader('Content-Type', 'application/json');
     res.status(201).send(JSON.stringify(newUser));
